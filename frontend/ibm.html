@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume & Cover Letter Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            min-height: calc(100vh - 40px);
+        }
+
+        .form-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+
+        .preview-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: calc(100vh - 80px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            grid-column: 1 / -1;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .experience-item, .education-item {
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .remove-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            float: right;
+        }
+
+        .document {
+            background: white;
+            padding: 40px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            font-family: 'Times New Roman', serif;
+            line-height: 1.6;
+        }
+
+        .resume-header {
+            text-align: center;
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .resume-header h3 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            color: #666;
+        }
+
+        .resume-section {
+            margin-bottom: 25px;
+        }
+
+        .resume-section h4 {
+            color: #333;
+            font-size: 1.2rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+
+        .job-item, .edu-item {
+            margin-bottom: 15px;
+        }
+
+        .job-title, .edu-title {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .company, .school {
+            font-style: italic;
+            color: #666;
+        }
+
+        .date {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 20px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .skill-item {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .download-section {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Professional Resume & Cover Letter Generator</h1>
+        
+        <div class="form-section">
+            <h2>Your Information</h2>
+            
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" placeholder="Enter your 
+full name">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" 
+placeholder="your.email@example.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" placeholder="(555) 123-4567">
+            </div>
+            
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" id="address" placeholder="City, State, 
+ZIP">
+            </div>
+            
+            <div class="form-group">
+                <label for="linkedin">LinkedIn (Optional)</label>
+                <input type="url" id="linkedin" 
+placeholder="https://linkedin.com/in/yourprofile">
+            </div>
+            
+            <div class="form-group">
+                <label for="summary">Professional Summary</label>
+                <textarea id="summary" placeholder="Brief overview of your 
+professional background and goals..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="skills">Skills (comma-separated)</label>
+                <textarea id="skills" placeholder="JavaScript, Python, 
+Project Management, Communication..."></textarea>
+            </div>
+            
+            <h3>Work Experience</h3>
+            <div id="experienceContainer"></div>
+            <button class="btn" onclick="addExperience()">Add 
+Experience</button>
+            
+            <h3>Education</h3>
+            <div id="educationContainer"></div>
+            <button class="btn" onclick="addEducation()">Add 
+Education</button>
+            
+            <h3>Target Job Information</h3>
+            <div class="form-group">
+                <label for="jobTitle">Job Title</label>
+                <input type="text" id="jobTitle" placeholder="Software 
+Developer">
+            </div>
+            
+            <div class="form-group">
+                <label for="companyName">Company Name</label>
+                <input type="text" id="companyName" placeholder="ABC 
+Company">
+            </div>
+            
+            <div class="form-group">
+                <label for="jobDescription">Job 
+Description/Requirements</label>
+                <textarea id="jobDescription" placeholder="Paste the job 
+description here to customize your cover letter..."></textarea>
+            </div>
+            
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn" onclick="generateDocuments()">Generate 
+Resume & Cover Letter</button>
+                <button class="btn btn-secondary" 
+onclick="generateOptimizedSummary()">🤖 AI Optimize Summary</button>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; background: 
+rgba(102, 126, 234, 0.1); border-radius: 10px;">
+                <h4>🤖 AI Configuration</h4>
+                <p style="font-size: 14px; color: #666; margin-bottom: 
+10px;">
+                    To enable AI features, add your API key or set up a 
+backend proxy:
+                </p>
+                <div class="form-group">
+                    <label for="openaiKey">OpenAI API Key 
+(Optional)</label>
+                    <input type="password" id="openaiKey" 
+placeholder="sk-..." onchange="updateAIConfig('openai', this.value)">
+                </div>
+                <div class="form-group">
+                    <label for="proxyEndpoint">Backend Proxy URL 
+(Recommended)</label>
+                    <input type="url" id="proxyEndpoint" 
+placeholder="https://your-api.com/generate" 
+onchange="updateAIConfig('proxy', this.value)">
+                </div>
+                <p style="font-size: 12px; color: #888;">
+                    💡 For production, use a backend proxy to keep your 
+API keys secure.
+                </p>
+            </div>
+        </div>
+        
+        <div class="preview-section">
+            <div class="tab-buttons">
+                <button class="tab-btn active" 
+onclick="showTab('resume')">Resume</button>
+                <button class="tab-btn" 
+onclick="showTab('cover-letter')">Cover Letter</button>
+            </div>
+            
+            <div id="resume-tab" class="tab-content active">
+                <div id="resumePreview" class="document">
+                    <div class="resume-header">
+                        <h3>Your Name</h3>
+                        <div class="contact-info">
+                            <span>📧 email@example.com</span>
+                            <span>📱 (555) 123-4567</span>
+                            <span>📍 City, State</span>
+                        </div>
+                    </div>
+                    
+                    <div class="resume-section">
+                        <h4>Professional Summary</h4>
+                        <p>Your professional summary will appear 
+here...</p>
+                    </div>
+                    
+                    <div class="resume-section">
+                        <h4>Skills</h4>
+                        <div class="skills-grid">
+                            <div class="skill-item">Add your skills</div>
+                        </div>
+                    </div>
+                    
+                    <div class="resume-section">
+                        <h4>Work Experience</h4>
+                        <p>Your work experience will appear here...</p>
+                    </div>
+                    
+                    <div class="resume-section">
+                        <h4>Education</h4>
+                        <p>Your education will appear here...</p>
+                    </div>
+                </div>
+                
+                <div class="download-section">
+                    <button class="btn" 
+onclick="downloadPDF('resume')">Download Resume as PDF</button>
+                </div>
+            </div>
+            
+            <div id="cover-letter-tab" class="tab-content">
+                <div id="coverLetterPreview" class="document">
+                    <div style="text-align: right; margin-bottom: 30px;">
+                        <div id="coverLetterDate"></div>
+                    </div>
+                    
+                    <div style="margin-bottom: 30px;">
+                        <div><strong>Hiring Manager</strong></div>
+                        <div id="coverLetterCompany">Company Name</div>
+                    </div>
+                    
+                    <div style="margin-bottom: 30px;">
+                        <strong>Dear Hiring Manager,</strong>
+                    </div>
+                    
+                    <div id="coverLetterContent">
+                        <p>Your personalized cover letter will be 
+generated here based on your information and the job description...</p>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <p>Sincerely,</p>
+                        <p><strong id="coverLetterName">Your 
+Name</strong></p>
+                    </div>
+                </div>
+                
+                <div class="download-section">
+                    <button class="btn btn-secondary" 
+onclick="downloadPDF('cover-letter')">Download Cover Letter as 
+PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let experienceCount = 0;
+        let educationCount = 0;
+
+        function addExperience() {
+            experienceCount++;
+            const container = 
+document.getElementById('experienceContainer');
+            const div = document.createElement('div');
+            div.className = 'experience-item';
+            div.innerHTML = `
+                <button class="remove-btn" 
+onclick="removeItem(this)">Remove</button>
+                <div class="form-group">
+                    <label>Job Title</label>
+                    <input type="text" name="jobTitle${experienceCount}" 
+placeholder="Software Developer">
+                </div>
+                <div class="form-group">
+                    <label>Company</label>
+                    <input type="text" name="company${experienceCount}" 
+placeholder="ABC Company">
+                </div>
+                <div class="form-group">
+                    <label>Start Date</label>
+                    <input type="month" 
+name="startDate${experienceCount}">
+                </div>
+                <div class="form-group">
+                    <label>End Date</label>
+                    <input type="month" name="endDate${experienceCount}" 
+placeholder="Leave blank if current">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description${experienceCount}" 
+placeholder="Describe your responsibilities and 
+achievements..."></textarea>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        function addEducation() {
+            educationCount++;
+            const container = 
+document.getElementById('educationContainer');
+            const div = document.createElement('div');
+            div.className = 'education-item';
+            div.innerHTML = `
+                <button class="remove-btn" 
+onclick="removeItem(this)">Remove</button>
+                <div class="form-group">
+                    <label>Degree</label>
+                    <input type="text" name="degree${educationCount}" 
+placeholder="Bachelor of Science">
+                </div>
+                <div class="form-group">
+                    <label>Field of Study</label>
+                    <input type="text" name="field${educationCount}" 
+placeholder="Computer Science">
+                </div>
+                <div class="form-group">
+                    <label>School</label>
+                    <input type="text" name="school${educationCount}" 
+placeholder="University Name">
+                </div>
+                <div class="form-group">
+                    <label>Graduation Year</label>
+                    <input type="number" name="gradYear${educationCount}" 
+placeholder="2023">
+                </div>
+                <div class="form-group">
+                    <label>GPA (Optional)</label>
+                    <input type="text" name="gpa${educationCount}" 
+placeholder="3.8">
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        function removeItem(button) {
+            button.parentElement.remove();
+        }
+
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName + 
+'-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function generateDocuments() {
+            generateResume();
+            generateCoverLetter();
+        }
+
+        function generateResume() {
+            const fullName = document.getElementById('fullName').value || 
+'Your Name';
+            const email = document.getElementById('email').value || 
+'email@example.com';
+            const phone = document.getElementById('phone').value || '(555) 
+123-4567';
+            const address = document.getElementById('address').value || 
+'City, State';
+            const linkedin = document.getElementById('linkedin').value;
+            const summary = document.getElementById('summary').value || 
+'Professional summary will appear here...';
+            const skills = document.getElementById('skills').value;
+
+            // Generate resume HTML
+            let resumeHTML = `
+                <div class="resume-header">
+                    <h3>${fullName}</h3>
+                    <div class="contact-info">
+                        <span>📧 ${email}</span>
+                        <span>📱 ${phone}</span>
+                        <span>📍 ${address}</span>
+                        ${linkedin ? `<span>🔗 <a href="${linkedin}" 
+target="_blank">LinkedIn</a></span>` : ''}
+                    </div>
+                </div>
+
+                <div class="resume-section">
+                    <h4>Professional Summary</h4>
+                    <p>${summary}</p>
+                </div>
+            `;
+
+            // Add skills section
+            if (skills) {
+                const skillsArray = skills.split(',').map(skill => 
+skill.trim());
+                resumeHTML += `
+                    <div class="resume-section">
+                        <h4>Skills</h4>
+                        <div class="skills-grid">
+                            ${skillsArray.map(skill => `<div 
+class="skill-item">${skill}</div>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Add experience section
+            const experienceItems = 
+document.querySelectorAll('.experience-item');
+            if (experienceItems.length > 0) {
+                resumeHTML += '<div class="resume-section"><h4>Work 
+Experience</h4>';
+                experienceItems.forEach(item => {
+                    const jobTitle = 
+item.querySelector('[name^="jobTitle"]').value;
+                    const company = 
+item.querySelector('[name^="company"]').value;
+                    const startDate = 
+item.querySelector('[name^="startDate"]').value;
+                    const endDate = 
+item.querySelector('[name^="endDate"]').value || 'Present';
+                    const description = 
+item.querySelector('[name^="description"]').value;
+
+                    if (jobTitle && company) {
+                        resumeHTML += `
+                            <div class="job-item">
+                                <div class="job-title">${jobTitle}</div>
+                                <div class="company">${company}</div>
+                                <div class="date">${formatDate(startDate)} 
+- ${endDate === 'Present' ? endDate : formatDate(endDate)}</div>
+                                ${description ? `<p>${description}</p>` : 
+''}
+                            </div>
+                        `;
+                    }
+                });
+                resumeHTML += '</div>';
+            }
+
+            // Add education section
+            const educationItems = 
+document.querySelectorAll('.education-item');
+            if (educationItems.length > 0) {
+                resumeHTML += '<div 
+class="resume-section"><h4>Education</h4>';
+                educationItems.forEach(item => {
+                    const degree = 
+item.querySelector('[name^="degree"]').value;
+                    const field = 
+item.querySelector('[name^="field"]').value;
+                    const school = 
+item.querySelector('[name^="school"]').value;
+                    const gradYear = 
+item.querySelector('[name^="gradYear"]').value;
+                    const gpa = item.querySelector('[name^="gpa"]').value;
+
+                    if (degree && school) {
+                        resumeHTML += `
+                            <div class="edu-item">
+                                <div class="edu-title">${degree}${field ? 
+` in ${field}` : ''}</div>
+                                <div class="school">${school}</div>
+                                <div class="date">${gradYear ? `Graduated 
+${gradYear}` : ''}${gpa ? ` | GPA: ${gpa}` : ''}</div>
+                            </div>
+                        `;
+                    }
+                });
+                resumeHTML += '</div>';
+            }
+
+            document.getElementById('resumePreview').innerHTML = 
+resumeHTML;
+        }
+
+        async function generateCoverLetter() {
+            const fullName = document.getElementById('fullName').value || 
+'Your Name';
+            const companyName = 
+document.getElementById('companyName').value || 'Company Name';
+            const jobTitle = document.getElementById('jobTitle').value || 
+'the position';
+            const jobDescription = 
+document.getElementById('jobDescription').value;
+            const summary = document.getElementById('summary').value;
+
+            // Set current date
+            const today = new Date();
+            document.getElementById('coverLetterDate').textContent = 
+today.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            document.getElementById('coverLetterCompany').textContent = 
+companyName;
+            document.getElementById('coverLetterName').textContent = 
+fullName;
+
+            // Generate AI-powered cover letter content
+            let coverLetterContent = await 
+generateCoverLetterContent(fullName, jobTitle, companyName, summary, 
+jobDescription);
+            document.getElementById('coverLetterContent').innerHTML = 
+coverLetterContent;
+        }
+
+        function updateAIConfig(type, value) {
+            if (type === 'openai') {
+                AI_CONFIG.OPENAI_API_KEY = value;
+            } else if (type === 'proxy') {
+                AI_CONFIG.PROXY_ENDPOINT = value;
+            }
+            
+            // Show feedback
+            if (value) {
+                showNotification(`${type === 'openai' ? 'OpenAI' : 
+'Proxy'} configuration updated! AI features are now enabled.`);
+            }
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Add CSS for animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+            .loading-spinner {
+                animation: pulse 1.5s ease-in-out infinite;
+                font-size: 18px;
+                color: #667eea;
+            }
+            @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.5; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // AI Integration Configuration
+        const AI_CONFIG = {
+            // You can use OpenAI API, Claude API, or other AI services
+            // For demo purposes, we'll show multiple integration options
+            
+            OPENAI_API_KEY: '', // Add your OpenAI API key here
+            CLAUDE_API_KEY: '', // Add your Claude API key here
+            
+            // Alternative: Use a proxy server to hide API keys
+            PROXY_ENDPOINT: 'https://your-backend-api.com/generate',
+        };
+
+        async function generateWithAI(prompt, type = 'cover-letter') {
+            try {
+                // Show loading indicator
+                showLoadingIndicator(type);
+                
+                // Option 1: OpenAI GPT Integration
+                if (AI_CONFIG.OPENAI_API_KEY) {
+                    return await generateWithOpenAI(prompt);
+                }
+                
+                // Option 2: Claude API Integration
+                if (AI_CONFIG.CLAUDE_API_KEY) {
+                    return await generateWithClaude(prompt);
+                }
+                
+                // Option 3: Your backend proxy (recommended for 
+production)
+                if (AI_CONFIG.PROXY_ENDPOINT) {
+                    return await generateWithProxy(prompt, type);
+                }
+                
+                // Fallback to enhanced template-based generation
+                return generateSmartTemplate(prompt);
+                
+            } catch (error) {
+                console.error('AI Generation Error:', error);
+                return generateSmartTemplate(prompt); // Fallback
+            } finally {
+                hideLoadingIndicator(type);
+            }
+        }
+
+        async function generateWithOpenAI(prompt) {
+            const response = await 
+fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${AI_CONFIG.OPENAI_API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: 'gpt-3.5-turbo',
+                    messages: [{
+                        role: 'user',
+                        content: prompt
+                    }],
+                    max_tokens: 500,
+                    temperature: 0.7
+                })
+            });
+
+            const data = await response.json();
+            return data.choices[0].message.content;
+        }
+
+        async function generateWithClaude(prompt) {
+            const response = await 
+fetch('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': AI_CONFIG.CLAUDE_API_KEY,
+                    'anthropic-version': '2023-06-01'
+                },
+                body: JSON.stringify({
+                    model: 'claude-3-sonnet-20240229',
+                    max_tokens: 500,
+                    messages: [{
+                        role: 'user',
+                        content: prompt
+                    }]
+                })
+            });
+
+            const data = await response.json();
+            return data.content[0].text;
+        }
+
+        async function generateWithProxy(prompt, type) {
+            const response = await fetch(AI_CONFIG.PROXY_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    prompt: prompt,
+                    type: type
+                })
+            });
+
+            const data = await response.json();
+            return data.content;
+        }
+
+        function generateSmartTemplate(promptData) {
+            const { name, jobTitle, company, summary, jobDesc, skills, 
+experience } = promptData;
+            
+            // Enhanced template-based generation with better logic
+            let templates = {
+                intro: [
+                    `I am writing to express my enthusiasm for the 
+${jobTitle} position at ${company}.`,
+                    `I am excited to apply for the ${jobTitle} role at 
+${company}.`,
+                    `Your ${jobTitle} opening at ${company} immediately 
+caught my attention.`
+                ],
+                experience: [
+                    `My ${getExperienceYears(experience)} years of 
+experience in ${getMainSkills(skills)} have prepared me well for this 
+role.`,
+                    `With a strong background in ${getMainSkills(skills)}, 
+I bring valuable expertise to your team.`,
+                    `My proven track record in ${getMainSkills(skills)} 
+aligns perfectly with your requirements.`
+                ],
+                value: [
+                    `I am particularly excited about the opportunity to 
+contribute to ${company}'s innovative projects.`,
+                    `${company}'s commitment to excellence resonates with 
+my professional values.`,
+                    `I am drawn to ${company}'s reputation for fostering 
+growth and innovation.`
+                ],
+                closing: [
+                    `I would welcome the opportunity to discuss how my 
+skills can contribute to ${company}'s continued success.`,
+                    `I look forward to the possibility of discussing my 
+qualifications in more detail.`,
+                    `Thank you for considering my application. I am eager 
+to contribute to your team's success.`
+                ]
+            };
+
+            // Randomly select templates for variety
+            const intro = templates.intro[Math.floor(Math.random() * 
+templates.intro.length)];
+            const exp = templates.experience[Math.floor(Math.random() * 
+templates.experience.length)];
+            const value = templates.value[Math.floor(Math.random() * 
+templates.value.length)];
+            const closing = templates.closing[Math.floor(Math.random() * 
+templates.closing.length)];
+
+            return `<p>${intro} ${summary ? summary.split('.')[0] + ', and 
+' : ''}${exp}</p>
+                    <p>${getJobSpecificContent(jobDesc)} ${value}</p>
+                    <p>${closing}</p>
+                    <p>Thank you for your time and consideration.</p>`;
+        }
+
+        function createCoverLetterPrompt(userData) {
+            const { fullName, jobTitle, companyName, summary, 
+jobDescription, skills, experience, education } = userData;
+            
+            return `Create a professional cover letter for ${fullName} 
+applying for the ${jobTitle} position at ${companyName}.
+
+Personal Summary: ${summary}
+Skills: ${skills}
+Experience: ${getExperienceDetails(experience)}
+Education: ${getEducationDetails(education)}
+
+Job Description: ${jobDescription}
+
+Requirements:
+- Write in first person
+- Keep it professional and concise (3-4 paragraphs)
+- Highlight relevant skills and experience
+- Show enthusiasm for the company and role
+- Match keywords from the job description
+- Include a strong opening and closing
+- Return only the body paragraphs (no date, address, or signature)
+- Format as HTML paragraphs with <p> tags`;
+        }
+
+        function createResumePrompt(userData, section) {
+            const { fullName, summary, skills, experience, education } = 
+userData;
+            
+            switch(section) {
+                case 'summary':
+                    return `Create a professional summary for 
+${fullName}'s resume based on:
+                    Current Summary: ${summary}
+                    Skills: ${skills}
+                    Experience: ${getExperienceDetails(experience)}
+                    
+                    Make it concise (2-3 sentences), impactful, and 
+professional. Focus on key achievements and career goals.`;
+                    
+                case 'skills':
+                    return `Optimize and categorize these skills for a 
+resume:
+                    ${skills}
+                    
+                    Group them into relevant categories (Technical, Soft 
+Skills, etc.) and suggest any missing important skills for their field.`;
+                    
+                default:
+                    return summary;
+            }
+        }
+
+        async function generateCoverLetterContent(name, jobTitle, company, 
+summary, jobDesc) {
+            const userData = {
+                fullName: name,
+                jobTitle: jobTitle,
+                companyName: company,
+                summary: summary,
+                jobDescription: jobDesc,
+                skills: document.getElementById('skills').value,
+                experience: getFormExperience(),
+                education: getFormEducation()
+            };
+
+            if (AI_CONFIG.OPENAI_API_KEY || AI_CONFIG.CLAUDE_API_KEY || 
+AI_CONFIG.PROXY_ENDPOINT) {
+                const prompt = createCoverLetterPrompt(userData);
+                return await generateWithAI(prompt, 'cover-letter');
+            } else {
+                return generateSmartTemplate(userData);
+            }
+        }
+
+        async function generateOptimizedSummary() {
+            const summary = document.getElementById('summary').value;
+            if (!summary) return;
+
+            const userData = {
+                fullName: document.getElementById('fullName').value,
+                summary: summary,
+                skills: document.getElementById('skills').value,
+                experience: getFormExperience(),
+                education: getFormEducation()
+            };
+
+            if (AI_CONFIG.OPENAI_API_KEY || AI_CONFIG.CLAUDE_API_KEY || 
+AI_CONFIG.PROXY_ENDPOINT) {
+                const prompt = createResumePrompt(userData, 'summary');
+                const optimizedSummary = await generateWithAI(prompt, 
+'summary');
+                document.getElementById('summary').value = 
+optimizedSummary.replace(/<[^>]*>/g, '');
+                generateDocuments();
+            }
+        }
+
+        // Helper functions
+        function getFormExperience() {
+            const experiences = [];
+            document.querySelectorAll('.experience-item').forEach(item => 
+{
+                const exp = {
+                    jobTitle: 
+item.querySelector('[name^="jobTitle"]').value,
+                    company: 
+item.querySelector('[name^="company"]').value,
+                    startDate: 
+item.querySelector('[name^="startDate"]').value,
+                    endDate: 
+item.querySelector('[name^="endDate"]').value,
+                    description: 
+item.querySelector('[name^="description"]').value
+                };
+                if (exp.jobTitle && exp.company) experiences.push(exp);
+            });
+            return experiences;
+        }
+
+        function getFormEducation() {
+            const education = [];
+            document.querySelectorAll('.education-item').forEach(item => {
+                const edu = {
+                    degree: item.querySelector('[name^="degree"]').value,
+                    field: item.querySelector('[name^="field"]').value,
+                    school: item.querySelector('[name^="school"]').value,
+                    year: item.querySelector('[name^="gradYear"]').value
+                };
+                if (edu.degree && edu.school) education.push(edu);
+            });
+            return education;
+        }
+
+        function getExperienceYears(experience) {
+            if (!experience || experience.length === 0) return '0';
+            // Calculate total experience years
+            let totalMonths = 0;
+            experience.forEach(exp => {
+                if (exp.startDate) {
+                    const start = new Date(exp.startDate);
+                    const end = exp.endDate ? new Date(exp.endDate) : new 
+Date();
+                    totalMonths += (end.getFullYear() - 
+start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+                }
+            });
+            return Math.round(totalMonths / 12);
+        }
+
+        function getMainSkills(skills) {
+            if (!skills) return 'relevant technologies';
+            const skillsArray = skills.split(',').map(s => s.trim());
+            return skillsArray.slice(0, 3).join(', ');
+        }
+
+        function getJobSpecificContent(jobDesc) {
+            if (!jobDesc || jobDesc.length < 50) {
+                return "My experience and skills align well with your 
+requirements.";
+            }
+            
+            // Simple keyword matching for job-specific content
+            const keywords = jobDesc.toLowerCase();
+            if (keywords.includes('leadership') || 
+keywords.includes('manage')) {
+                return "My leadership experience and management skills 
+make me well-suited for this role.";
+            } else if (keywords.includes('technical') || 
+keywords.includes('development')) {
+                return "My technical expertise and development experience 
+align perfectly with your needs.";
+            } else {
+                return "Based on the job requirements, I am confident in 
+my ability to excel in this position.";
+            }
+        }
+
+        function getExperienceDetails(experience) {
+            return experience.map(exp => `${exp.jobTitle} at 
+${exp.company}`).join(', ');
+        }
+
+        function getEducationDetails(education) {
+            return education.map(edu => `${edu.degree} ${edu.field ? 'in ' 
++ edu.field : ''} from ${edu.school}`).join(', ');
+        }
+
+        function showLoadingIndicator(type) {
+            const element = type === 'cover-letter' ? 
+                document.getElementById('coverLetterContent') : 
+                document.getElementById('resumePreview');
+            element.innerHTML = '<div style="text-align: center; padding: 
+20px;"><div class="loading-spinner">🤖 AI is generating 
+content...</div></div>';
+        }
+
+        function hideLoadingIndicator(type) {
+            // Loading will be hidden when content is replaced
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { year: 'numeric', 
+month: 'long' });
+        }
+
+        function downloadPDF(type) {
+            // This is a placeholder for PDF generation
+            // In a real application, you'd use a library like jsPDF or 
+html2pdf
+            alert(`PDF download feature would be implemented here for 
+${type}.\n\nFor now, you can:\n1. Print this page (Ctrl+P)\n2. Save as PDF 
+from the print dialog\n3. Or copy the content to a document editor`);
+        }
+
+        // Initialize with one experience and education item
+        addExperience();
+        addEducation();
+
+        // Real-time preview updates
+        document.addEventListener('input', function(e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 
+'TEXTAREA') {
+                generateDocuments();
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
