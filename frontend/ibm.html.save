@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Resume & Cover Letter Generator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 30px;
+      background: linear-gradient(to right, #74ebd5, #acb6e5);
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #fff;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .tab-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .tab-buttons button {
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #eee;
+      transition: 0.3s ease;
+    }
+
+    .tab-buttons .active {
+      background: #007bff;
+      color: white;
+    }
+
+    .form-section {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    #educationList, #experienceList {
+      margin-bottom: 10px;
+    }
+
+    .entry-group {
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #output {
+      background: white;
+      padding: 15px;
+      margin-top: 30px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Resume & Cover Letter Generator</h1>
+
+  <div class="tab-buttons">
+    <button id="resumeBtn" class="active" 
+onclick="switchTab('resume')">Resume</button>
+    <button id="coverBtn" onclick="switchTab('coverLetter')">Cover 
+Letter</button>
+  </div>
+
+  <div class="form-section">
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="fullName" />
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="text" id="email" />
+    </div>
+
+    <div class="form-group">
+      <label>Professional Summary</label>
+      <textarea id="summary"></textarea>
+    </div>
+
+    <h3>Education</h3>
+    <div id="educationList"></div>
+    <button type="button" onclick="addEducation()">Add 
+Education</button>
+
+    <h3>Experience</h3>
+    <div id="experienceList"></div>
+    <button type="button" onclick="addExperience()">Add 
+Experience</button>
+
+    <div class="form-group">
+      <label>Skills (comma-separated)</label>
+      <input type="text" id="skills" />
+    </div>
+
+    <button onclick="generateContent()">Generate Resume & Cover 
+Letter</button>
+  </div>
+
+  <div id="output"></div>
+
+  <script>
+    let currentTab = 'resume';
+
+    function switchTab(tab) {
+      currentTab = tab;
+      
+document.getElementById("resumeBtn").classList.toggle("active", 
+tab === 'resume');
+      
+document.getElementById("coverBtn").classList.toggle("active", tab 
+=== 'coverLetter');
+    }
+
+    function addEducation() {
+      const eduDiv = document.createElement('div');
+      eduDiv.className = 'entry-group';
+      eduDiv.innerHTML = `
+        <input placeholder="Degree" class="degree" /><br>
+        <input placeholder="Institution" class="institution" 
+/><br>
+        <input placeholder="Year" class="year" />
+      `;
+      
+document.getElementById('educationList').appendChild(eduDiv);
+    }
+
+    function addExperience() {
+      const expDiv = document.createElement('div');
+      expDiv.className = 'entry-group';
+      expDiv.innerHTML = `
+        <input placeholder="Job Title" class="jobTitle" /><br>
+        <input placeholder="Company" class="company" /><br>
+        <input placeholder="Duration" class="duration" /><br>
+        <textarea placeholder="Description" 
+class="description"></textarea>
+      `;
+      
+document.getElementById('experienceList').appendChild(expDiv);
+    }
+
+    async function generateContent() {
+      const fullName = document.getElementById('fullName').value;
+      const email = document.getElementById('email').value;
+      const summary = document.getElementById('summary').value;
+      const skills = document.getElementById('skills').value;
+
+      const educations = 
+Array.from(document.querySelectorAll('.degree')).map((_, i) => ({
+        degree: document.querySelectorAll('.degree')[i].value,
+        institution: 
+document.querySelectorAll('.institution')[i].value,
+        year: document.querySelectorAll('.year')[i].value
+      }));
+
+      const experiences = 
+Array.from(document.querySelectorAll('.jobTitle')).map((_, i) => 
+({
+        jobTitle: document.querySelectorAll('.jobTitle')[i].value,
+        company: document.querySelectorAll('.company')[i].value,
+        duration: document.querySelectorAll('.duration')[i].value,
+        description: 
+document.querySelectorAll('.description')[i].value
+      }));
+
+      let prompt = `Generate a ${currentTab === 'resume' ? 
+'professional resume' : 'custom cover letter'} for:\n`;
+      prompt += `Name: ${fullName}\nEmail: ${email}\nSummary: 
+${summary}\nSkills: ${skills}\n\n`;
+
+      prompt += `Education:\n`;
+      educations.forEach(e => {
+        prompt += `- ${e.degree}, ${e.institution}, ${e.year}\n`;
+      });
+
+      prompt += `\nExperience:\n`;
+      experiences.forEach(e => {
+        prompt += `- ${e.jobTitle} at ${e.company} 
+(${e.duration}): ${e.description}\n`;
+      });
+
+      const res = await fetch('http://localhost:5000/generate', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ prompt })
+      });
+
+      const data = await res.json();
+      document.getElementById('output').textContent = data.content 
+|| data.error;
+    }
+  </script>
+</body>
+</html>
+!DOCTYPE 
+h<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Resume & Cover Letter Generator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 30px;
+      background: linear-gradient(to right, #74ebd5, #acb6e5);
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #fff;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .tab-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .tab-buttons button {
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #eee;
+      transition: 0.3s ease;
+    }
+
+    .tab-buttons .active {
+      background: #007bff;
+      color: white;
+    }
+
+    .form-section {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    #educationList, #experienceList {
+      margin-bottom: 10px;
+    }
+
+    .entry-group {
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #output {
+      background: white;
+      padding: 15px;
+      margin-top: 30px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Resume & Cover Letter Generator</h1>
+
+  <div class="tab-buttons">
+    <button id="resumeBtn" class="active" 
+onclick="switchTab('resume')">Resume</button>
+    <button id="coverBtn" onclick="switchTab('coverLetter')">Cover 
+Letter</button>
+  </div>
+
+  <div class="form-section">
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="fullName" />
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="text" id="email" />
+    </div>
+
+    <div class="form-group">
+      <label>Professional Summary</label>
+      <textarea id="summary"></textarea>
+    </div>
+
+    <h3>Education</h3>
+    <div id="educationList"></div>
+    <button type="button" onclick="addEducation()">Add 
+Education</button>
+
+    <h3>Experience</h3>
+    <div id="experienceList"></div>
+    <button type="button" onclick="addExperience()">Add 
+Experience</button>
+
+    <div class="form-group">
+      <label>Skills (comma-separated)</label>
+      <input type="text" id="skills" />
+    </div>
+
+    <button onclick="generateContent()">Generate Resume & Cover 
+Letter</button>
+  </div>
+
+  <div id="output"></div>
+
+  <script>
+    let currentTab = 'resume';
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.getElementById("resumeBtn").classList.toggle("active", 
+tab === 'resume');
+      document.getElementById("coverBtn").classList.toggle("active", 
+tab === 'coverLetter');
+    }
+
+    function addEducation() {
+      const eduDiv = document.createElement('div');
+      eduDiv.className = 'entry-group';
+      eduDiv.innerHTML = `
+        <input placeholder="Degree" class="degree" /><br>
+        <input placeholder="Institution" class="institution" /><br>
+        <input placeholder="Year" class="year" />
+      `;
+      document.getElementById('educationList').appendChild(eduDiv);
+    }
+
+    function addExperience() {
+      const expDiv = document.createElement('div');
+      expDiv.className = 'entry-group';
+      expDiv.innerHTML = `
+        <input placeholder="Job Title" class="jobTitle" /><br>
+        <input placeholder="Company" class="company" /><br>
+        <input placeholder="Duration" class="duration" /><br>
+        <textarea placeholder="Description" 
+class="description"></textarea>
+      `;
+      document.getElementById('experienceList').appendChild(expDiv);
+    }
+
+    async function generateContent() {
+      const fullName = document.getElementById('fullName').value;
+      const email = document.getElementById('email').value;
+      const summary = document.getElementById('summary').value;
+      const skills = document.getElementById('skills').value;
+
+      const educations = 
+Array.from(document.querySelectorAll('.degree')).map((_, i) => ({
+        degree: document.querySelectorAll('.degree')[i].value,
+        institution: 
+document.querySelectorAll('.institution')[i].value,
+        year: document.querySelectorAll('.year')[i].value
+      }));
+
+      const experiences = 
+Array.from(document.querySelectorAll('.jobTitle')).map((_, i) => ({
+        jobTitle: document.querySelectorAll('.jobTitle')[i].value,
+        company: document.querySelectorAll('.company')[i].value,
+        duration: document.querySelectorAll('.duration')[i].value,
+        description: 
+document.querySelectorAll('.description')[i].value
+      }));
+
+      let prompt = `Generate a ${currentTab === 'resume' ? 
+'professional resume' : 'custom cover letter'} for:\n`;
+      prompt += `Name: ${fullName}\nEmail: ${email}\nSummary: 
+${summary}\nSkills: ${skills}\n\n`;
+
+      prompt += `Education:\n`;
+      educations.forEach(e => {
+        prompt += `- ${e.degree}, ${e.institution}, ${e.year}\n`;
+      });
+
+      prompt += `\nExperience:\n`;
+      experiences.forEach(e => {
+        prompt += `- ${e.jobTitle} at ${e.company} (${e.duration}): 
+${e.description}\n`;
+      });
+
+      const res = await fetch('http://localhost:5000/generate', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ prompt })
+      });
+
+      const data = await res.json();
+      document.getElementById('output').textContent = data.content || 
+data.error;
+    }
+  </script>
+</body>
+</html>
+tml>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume & Cover Letter Generator</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; 
+bakkckground: #f0f0f0; }
+kk    .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+    .tab { padding: 10px 20px; cursor: pointer; background: #ddd; 
+border-radius: 5px; }
+    .tab.active { background: #007bff; color: white; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; font-weight: bold; margin-bottom: 5px; }
+    input, textarea { width: 100%; padding: 8px; box-sizing: border-box; }
+    #output { white-space: pre-wrap; background: white; padding: 15px; 
+border: 1px solid #ccc; margin-top: 20px; border-radius: 5px; }
+    button { padding: 10px 15px; margin-top: 10px; cursor: pointer; 
+background: #007bff; color: white; border: none; border-radius: 5px; }
+    .section-title { margin-top: 20px; font-size: 18px; }
+    .list-item { margin-bottom: 10px; }
+    .flex-row { display: flex; gap: 10px; }
+    .flex-col { flex: 1; }
+  </style>
+</head>
+<body>
+
+  <h1>Resume & Cover Letter Generator</h1>
+
+  <div class="tabs">
+    <div id="resumeTab" class="tab active" 
+onclick="switchTab('resume')">Resume</div>
+    <div id="coverLetterTab" class="tab" 
+onclick="switchTab('coverLetter')">Cover Letter</div>
+  </div>
+
+  <div class="form-group">
+    <label>Full Name</label>
+    <input type="text" id="fullName" />
+  </div>
+
+  <div class="form-group">
+    <label>Email</label>
+    <input type="text" id="email" />
+  </div>
+
+  <div class="form-group">
+    <label>Professional Summary</label>
+    <textarea id="summary"></textarea>
+  </div>
+
+  <div class="section-title">Education</div>
+  <div id="educationList"></div>
+  <button onclick="addEducation()">Add Education</button>
+
+  <div class="section-title">Experience</div>
+  <div id="experienceList"></div>
+  <button onclick="addExperience()">Add Experience</button>
+
+  <div class="section-title">Skills (comma-separated)</div>
+  <input type="text" id="skills" />
+
+  <br><br>
+  <button onclick="generateDocument()">Generate Resume & Cover 
+Letter</button>
+
+  <div id="output"></div>
+
+  <script>
+    let currentTab = 'resume';
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.getElementById('resumeTab').classList.toggle('active', tab 
+=== 'resume');
+      document.getElementById('coverLetterTab').classList.toggle('active', 
+tab === 'coverLetter');
+    }
+
+    function addEducation() {
+      const container = document.createElement('div');
+      container.className = 'list-item';
+      container.innerHTML = `
+        <div class="flex-row">
+          <div class="flex-col"><input placeholder="Degree" class="degree" 
+/></div>
+          <div class="flex-col"><input placeholder="Institution" 
+class="institution" /></div>
+          <div class="flex-col"><input placeholder="Year" class="year" 
+/></div>
+        </div>`;
+      document.getElementById('educationList').appendChild(container);
+    }
+
+    function addExperience() {
+      const container = document.createElement('div');
+      container.className = 'list-item';
+      container.innerHTML = `
+        <div class="flex-row">
+          <div class="flex-col"><input placeholder="Job Title" 
+class="jobTitle" /></div>
+          <div class="flex-col"><input placeholder="Company" 
+class="company" /></div>
+          <div class="flex-col"><input placeholder="Duration" 
+class="duration" /></div>
+        </div>
+        <textarea placeholder="Descripts="description"></textarea>`;
+      document.getElementById('experienceList').appendChild(container);
+    }
+
+    async function generateDocument() {
+      const fullName = document.getElementById('fullName').value;
+      const email = document.getElementById('email').value;
+      const summary = document.getElementById('summary').value;
+      const skills = document.getElementById('skills').value;
+
+      const educations = 
+Array.from(document.querySelectorAll('.degree')).map((_, i) => ({
+        degree: document.querySelectorAll('.degree')[i].value,
+        institution: document.querySelectorAll('.institution')[i].value,
+        year: document.querySelectorAll('.year')[i].value
+      }));
+
+      const experiences = 
+Array.from(document.querySelectorAll('.jobTitle')).map((_, i) => ({
+        jobTitle: document.querySelectorAll('.jobTitle')[i].value,
+        company: document.querySelectorAll('.company')[i].value,
+        duration: document.querySelectorAll('.duration')[i].value,
+        description: document.querySelectorAll('.description')[i].value
+      }));
+
+      let prompt = `Create a ${currentTab === 'resume' ? 'professional 
+resume' : 'custom cover letter'} for the following:\n`;
+      prompt += `Name: ${fullName}\nEmail: ${email}\nSummary: 
+${summary}\nSkills: ${skills}\n\n`;
+
+      prompt += `Education:\n`;
+      educations.forEach(e => {
+        prompt += `- ${e.degree} from ${e.institution} (${e.year})\n`;
+      });
+
+      prompt += `\nExperience:\n`;
+      experiences.forEach(e => {
+        prompt += `- ${e.jobTitle} at ${e.company} (${e.duration}): 
+${e.description}\n`;
+      });
+
+      const response = await fetch('http://localhost:5000/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+
+kk
