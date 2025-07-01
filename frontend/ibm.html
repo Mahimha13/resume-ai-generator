@@ -10,15 +10,13 @@
       min-height: 100vh;
       margin: 0;
       font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      padding: 20px 0;
     }
     .container {
       background: #fff;
       max-width: 650px;
       width: 100%;
-      margin: 40px 0;
+      margin: 0 auto;
       border-radius: 18px;
       box-shadow: 0 8px 32px rgba(60, 72, 100, 0.14);
       padding: 36px 28px 28px 28px;
@@ -46,8 +44,7 @@
       margin-bottom: 6px;
       letter-spacing: 0.5px;
     }
-    input[type="text"], input[type="email"], input[type="tel"], textarea, 
-select {
+    input[type="text"], input[type="email"], input[type="tel"], textarea, select {
       width: 100%;
       padding: 11px 10px;
       border-radius: 8px;
@@ -57,6 +54,7 @@ select {
       margin-bottom: 10px;
       transition: border 0.2s;
       resize: vertical;
+      box-sizing: border-box;
     }
     input:focus, textarea:focus, select:focus {
       border: 1.5px solid #6366f1;
@@ -88,11 +86,12 @@ select {
       margin: 7px 0 13px 0;
       cursor: pointer;
       font-size: 0.98rem;
-      transition: background 0.2s;
+      transition: all 0.2s;
     }
     .add-btn:hover {
       background: #6366f1;
       color: #fff;
+      transform: translateY(-1px);
     }
     .dynamic-list {
       margin-bottom: 10px;
@@ -100,20 +99,33 @@ select {
     .dynamic-item {
       background: #f3f4f6;
       border-radius: 6px;
-      padding: 7px 10px;
-      margin-bottom: 6px;
+      padding: 12px;
+      margin-bottom: 8px;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
-      font-size: 0.98rem;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      border: 1px solid #e5e7eb;
+    }
+    .dynamic-item-content {
+      flex: 1;
+      margin-right: 10px;
     }
     .remove-btn {
-      background: none;
-      border: none;
-      color: #ef4444;
-      font-size: 1.1rem;
+      background: #fee2e2;
+      border: 1px solid #fecaca;
+      color: #dc2626;
+      font-size: 0.8rem;
       cursor: pointer;
-      margin-left: 8px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .remove-btn:hover {
+      background: #fca5a5;
+      color: #991b1b;
     }
     button[type="submit"] {
       display: block;
@@ -128,25 +140,63 @@ select {
       font-weight: 700;
       cursor: pointer;
       box-shadow: 0 4px 16px rgba(99, 102, 241, 0.13);
-      transition: background 0.2s, transform 0.1s;
+      transition: all 0.2s;
+    }
+    button[type="submit"]:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.2);
     }
     button[type="submit"]:disabled {
       background: #c7d2fe;
       color: #6b7280;
       cursor: not-allowed;
+      transform: none;
+    }
+    .loading {
+      background: linear-gradient(90deg, #c7d2fe 25%, #e0e7ff 50%, #c7d2fe 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
     }
     #output {
       margin-top: 32px;
-      background: #f3f4f6;
-      padding: 18px 16px;
+      background: #f8fafc;
+      padding: 24px;
       border-radius: 12px;
-      min-height: 120px;
+      min-height: 200px;
       white-space: pre-wrap;
-      font-family: inherit;
-      color: #374151;
-      font-size: 1.04rem;
-      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.07);
-      animation: fadeIn 0.7s;
+      font-family: 'Georgia', serif;
+      color: #1f2937;
+      font-size: 1rem;
+      line-height: 1.6;
+      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.1);
+      border: 1px solid #e5e7eb;
+      animation: slideIn 0.5s ease-out;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .copy-btn {
+      background: #10b981;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-weight: 600;
+      margin-top: 15px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+    }
+    .copy-btn:hover {
+      background: #059669;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
     }
     .footer {
       text-align: center;
@@ -155,13 +205,61 @@ select {
       font-size: 0.98rem;
       letter-spacing: 0.2px;
     }
+    .experience-form, .education-form {
+      background: #f8fafc;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+      border: 1px solid #e5e7eb;
+    }
+    .form-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .form-row input {
+      margin-bottom: 0;
+    }
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+    .btn-save {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    .btn-save:hover {
+      background: #059669;
+    }
+    .btn-cancel {
+      background: #6b7280;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    .btn-cancel:hover {
+      background: #4b5563;
+    }
     @media (max-width: 700px) {
       .container {
         padding: 18px 6vw 22px 6vw;
         max-width: 98vw;
+        margin: 0 10px;
       }
       h1 { font-size: 1.35rem; }
       .inline-fields { flex-direction: column; gap: 0; }
+      .form-row { flex-direction: column; gap: 5px; }
     }
   </style>
 </head>
@@ -176,8 +274,7 @@ select {
       <div class="inline-fields">
         <div>
           <label for="email">Email</label>
-          <input type="email" id="email" 
-placeholder="your.email@example.com">
+          <input type="email" id="email" placeholder="your.email@example.com">
         </div>
         <div>
           <label for="phone">Phone</label>
@@ -188,27 +285,51 @@ placeholder="your.email@example.com">
       <input type="text" id="address" placeholder="City, State, ZIP">
 
       <label for="linkedin">LinkedIn (Optional)</label>
-      <input type="text" id="linkedin" 
-placeholder="https://linkedin.com/in/yourprofile">
+      <input type="text" id="linkedin" placeholder="https://linkedin.com/in/yourprofile">
 
       <div class="section-title">Professional Summary</div>
-      <textarea id="summary" rows="2" placeholder="Brief overview of your 
-professional background and goals..."></textarea>
+      <textarea id="summary" rows="3" placeholder="Brief overview of your professional background and goals..."></textarea>
 
-      <div class="section-title">Skills <span 
-style="color:#a5b4fc;font-weight:400;font-size:0.98rem;">(comma-separated)</span></div>
-      <input type="text" id="skills" placeholder="JavaScript, Python, 
-Project Management, Communication...">
+      <div class="section-title">Skills <span style="color:#a5b4fc;font-weight:400;font-size:0.98rem;">(comma-separated)</span></div>
+      <input type="text" id="skills" placeholder="JavaScript, Python, Project Management, Communication...">
 
       <div class="section-title">Work Experience</div>
       <div id="experienceList" class="dynamic-list"></div>
-      <button type="button" class="add-btn" id="addExperienceBtn">+ Add 
-Experience</button>
+      <div id="experienceForm" class="experience-form" style="display: none;">
+        <div class="form-row">
+          <input type="text" id="expTitle" placeholder="Job Title" style="flex: 1;">
+          <input type="text" id="expCompany" placeholder="Company" style="flex: 1;">
+        </div>
+        <div class="form-row">
+          <input type="text" id="expDates" placeholder="Start Date - End Date" style="flex: 1;">
+          <input type="text" id="expLocation" placeholder="Location" style="flex: 1;">
+        </div>
+        <textarea id="expDescription" rows="3" placeholder="Describe your responsibilities and achievements..."></textarea>
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" id="cancelExp">Cancel</button>
+          <button type="button" class="btn-save" id="saveExp">Save Experience</button>
+        </div>
+      </div>
+      <button type="button" class="add-btn" id="addExperienceBtn">+ Add Work Experience</button>
 
       <div class="section-title">Education</div>
       <div id="educationList" class="dynamic-list"></div>
-      <button type="button" class="add-btn" id="addEducationBtn">+ Add 
-Education</button>
+      <div id="educationForm" class="education-form" style="display: none;">
+        <div class="form-row">
+          <input type="text" id="eduDegree" placeholder="Degree" style="flex: 1;">
+          <input type="text" id="eduSchool" placeholder="School/University" style="flex: 1;">
+        </div>
+        <div class="form-row">
+          <input type="text" id="eduYear" placeholder="Graduation Year" style="flex: 1;">
+          <input type="text" id="eduLocation" placeholder="Location" style="flex: 1;">
+        </div>
+        <textarea id="eduDescription" rows="2" placeholder="Additional details (GPA, honors, relevant coursework...)"></textarea>
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" id="cancelEdu">Cancel</button>
+          <button type="button" class="btn-save" id="saveEdu">Save Education</button>
+        </div>
+      </div>
+      <button type="button" class="add-btn" id="addEducationBtn">+ Add Education</button>
 
       <div class="section-title">Target Job Information</div>
       <label for="jobTitle">Job Title</label>
@@ -216,10 +337,8 @@ Education</button>
 
       <label for="companyName">Company Name</label>
       <input type="text" id="companyName" placeholder="ABC Company">
-
       <label for="jobDescription">Job Description/Requirements</label>
-      <textarea id="jobDescription" rows="2" placeholder="Paste the job 
-description here to customize your cover letter..."></textarea>
+      <textarea id="jobDescription" rows="3" placeholder="Paste the job description here to customize your cover letter..."></textarea>
 
       <label for="type">What do you want to generate?</label>
       <select id="type">
@@ -228,136 +347,364 @@ description here to customize your cover letter..."></textarea>
         <option value="both">Resume & Cover Letter</option>
       </select>
 
-      <button type="submit" id="generateBtn">Generate Resume & Cover 
-Letter</button>
+      <button type="submit" id="generateBtn">Generate Document</button>
     </form>
-    <div id="output"></div>
+    
+    <div id="output" style="display: none;"></div>
+    
     <div class="footer">Made by Mahimha</div>
   </div>
+
   <script>
-    // Dynamic Experience
-    const experienceList = document.getElementById('experienceList');
-    const addExperienceBtn = document.getElementById('addExperienceBtn');
+    // Experience and Education data
     let experiences = [];
+    let educations = [];
+
+    // Experience Management
+    const experienceList = document.getElementById('experienceList');
+    const experienceForm = document.getElementById('experienceForm');
+    const addExperienceBtn = document.getElementById('addExperienceBtn');
 
     function renderExperiences() {
       experienceList.innerHTML = '';
       experiences.forEach((exp, idx) => {
         const div = document.createElement('div');
         div.className = 'dynamic-item';
-        div.innerHTML = `<span>${exp}</span>
-          <button type="button" class="remove-btn" title="Remove 
-Experience" onclick="removeExperience(${idx})">&times;</button>`;
+        div.innerHTML = `
+          <div class="dynamic-item-content">
+            <strong>${exp.title} at ${exp.company}</strong><br>
+            <em>${exp.dates} • ${exp.location}</em><br>
+            <span>${exp.description}</span>
+          </div>
+          <button type="button" class="remove-btn" onclick="removeExperience(${idx})">Remove</button>
+        `;
         experienceList.appendChild(div);
       });
     }
+
+    function showExperienceForm() {
+      experienceForm.style.display = 'block';
+      addExperienceBtn.style.display = 'none';
+      document.getElementById('expTitle').focus();
+    }
+
+    function hideExperienceForm() {
+      experienceForm.style.display = 'none';
+      addExperienceBtn.style.display = 'block';
+      // Clear form
+      document.getElementById('expTitle').value = '';
+      document.getElementById('expCompany').value = '';
+      document.getElementById('expDates').value = '';
+      document.getElementById('expLocation').value = '';
+      document.getElementById('expDescription').value = '';
+    }
+
+    function saveExperience() {
+      const title = document.getElementById('expTitle').value.trim();
+      const company = document.getElementById('expCompany').value.trim();
+      const dates = document.getElementById('expDates').value.trim();
+      const location = document.getElementById('expLocation').value.trim();
+      const description = document.getElementById('expDescription').value.trim();
+
+      if (!title || !company || !dates) {
+        alert('Please fill in at least the job title, company, and dates.');
+        return;
+      }
+
+      experiences.push({
+        title,
+        company,
+        dates,
+        location,
+        description
+      });
+
+      renderExperiences();
+      hideExperienceForm();
+    }
+
     window.removeExperience = function(idx) {
       experiences.splice(idx, 1);
       renderExperiences();
     };
-    addExperienceBtn.onclick = () => {
-      const exp = prompt('Enter your work experience (e.g. "Frontend 
-Developer at ABC Corp (2022-2024). Developed...")');
-      if (exp && exp.trim()) {
-        experiences.push(exp.trim());
-        renderExperiences();
-      }
-    };
 
-    // Dynamic Education
+    addExperienceBtn.addEventListener('click', showExperienceForm);
+    document.getElementById('cancelExp').addEventListener('click', hideExperienceForm);
+    document.getElementById('saveExp').addEventListener('click', saveExperience);
+
+    // Education Management
     const educationList = document.getElementById('educationList');
+    const educationForm = document.getElementById('educationForm');
     const addEducationBtn = document.getElementById('addEducationBtn');
-    let educations = [];
 
     function renderEducations() {
       educationList.innerHTML = '';
-      educations.forEach((ed, idx) => {
+      educations.forEach((edu, idx) => {
         const div = document.createElement('div');
         div.className = 'dynamic-item';
-        div.innerHTML = `<span>${ed}</span>
-          <button type="button" class="remove-btn" title="Remove 
-Education" onclick="removeEducation(${idx})">&times;</button>`;
+        div.innerHTML = `
+          <div class="dynamic-item-content">
+            <strong>${edu.degree}</strong><br>
+            <em>${edu.school} • ${edu.year} • ${edu.location}</em><br>
+            ${edu.description ? `<span>${edu.description}</span>` : ''}
+          </div>
+          <button type="button" class="remove-btn" onclick="removeEducation(${idx})">Remove</button>
+        `;
         educationList.appendChild(div);
       });
     }
+
+    function showEducationForm() {
+      educationForm.style.display = 'block';
+      addEducationBtn.style.display = 'none';
+      document.getElementById('eduDegree').focus();
+    }
+    function hideEducationForm() {
+      educationForm.style.display = 'none';
+      addEducationBtn.style.display = 'block';
+      // Clear form
+      document.getElementById('eduDegree').value = '';
+      document.getElementById('eduSchool').value = '';
+      document.getElementById('eduYear').value = '';
+      document.getElementById('eduLocation').value = '';
+      document.getElementById('eduDescription').value = '';
+    }
+
+    function saveEducation() {
+      const degree = document.getElementById('eduDegree').value.trim();
+      const school = document.getElementById('eduSchool').value.trim();
+      const year = document.getElementById('eduYear').value.trim();
+      const location = document.getElementById('eduLocation').value.trim();
+      const description = document.getElementById('eduDescription').value.trim();
+
+      if (!degree || !school || !year) {
+        alert('Please fill in at least the degree, school, and graduation year.');
+        return;
+      }
+
+      educations.push({
+        degree,
+        school,
+        year,
+        location,
+        description
+      });
+
+      renderEducations();
+      hideEducationForm();
+    }
+
     window.removeEducation = function(idx) {
       educations.splice(idx, 1);
       renderEducations();
     };
-    addEducationBtn.onclick = () => {
-      const ed = prompt('Enter your education (e.g. "B.Sc. in Computer 
-Science, XYZ University, 2022")');
-      if (ed && ed.trim()) {
-        educations.push(ed.trim());
-        renderEducations();
+
+    addEducationBtn.addEventListener('click', showEducationForm);
+    document.getElementById('cancelEdu').addEventListener('click', hideEducationForm);
+    document.getElementById('saveEdu').addEventListener('click', saveEducation);
+
+    // Resume and Cover Letter Generation
+    function generateResume(data) {
+      let resume = `${data.fullName.toUpperCase()}\n`;
+      resume += `${'━'.repeat(Math.min(data.fullName.length + 5, 50))}\n\n`;
+      resume += `📧 ${data.email}`;
+      if (data.phone) resume += ` | 📱 ${data.phone}`;
+      if (data.address) resume += ` | 📍 ${data.address}`;
+      if (data.linkedin) resume += `\n🔗 ${data.linkedin}`;
+      resume += `\n\n`;
+
+      if (data.summary) {
+        resume += `PROFESSIONAL SUMMARY\n`;
+        resume += `${'─'.repeat(20)}\n`;
+        resume += `${data.summary}\n\n`;
       }
-    };
+      if (data.skills) {
+        resume += `CORE COMPETENCIES\n`;
+        resume += `${'─'.repeat(17)}\n`;
+        const skillsArray = data.skills.split(',').map(s => s.trim());
+        const skillRows = [];
+        for (let i = 0; i < skillsArray.length; i += 3) {
+          skillRows.push(skillsArray.slice(i, i + 3).join(' • '));
+        }
+        resume += skillRows.join('\n') + '\n\n';
+      }
+      if (experiences.length > 0) {
+        resume += `PROFESSIONAL EXPERIENCE\n`;
+        resume += `${'─'.repeat(23)}\n`;
+        experiences.forEach((exp, index) => {
+          resume += `${exp.title} | ${exp.company}\n`;
+          resume += `${exp.dates} | ${exp.location}\n`;
+          if (exp.description) {
+            const achievements = exp.description.split('.').filter(s => s.trim());
+            achievements.forEach(achievement => {
+              if (achievement.trim()) {
+                resume += `• ${achievement.trim()}\n`;
+              }
+            });
+          }
+          if (index < experiences.length - 1) resume += `\n`;
+        });
+        resume += `\n`;
+      }
+      if (educations.length > 0) {
+        resume += `EDUCATION\n`;
+        resume += `${'─'.repeat(9)}\n`;
+        educations.forEach(edu => {
+          resume += `${edu.degree}\n`;
+          resume += `${edu.school} | ${edu.year} | ${edu.location}\n`;
+          if (edu.description) resume += `${edu.description}\n`;
+          resume += `\n`;
+        });
+      }
+      return resume;
+    }
+
+    function generateCoverLetter(data) {
+      const today = new Date();
+      const dateStr = today.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+
+      let coverLetter = `${data.fullName}\n`;
+      if (data.address) coverLetter += `${data.address}\n`;
+      if (data.phone) coverLetter += `${data.phone} | `;
+      coverLetter += `${data.email}\n`;
+      if (data.linkedin) coverLetter += `${data.linkedin}\n`;
+      coverLetter += `\n${dateStr}\n\n`;
+      
+      if (data.companyName) {
+        coverLetter += `Hiring Manager\n${data.companyName}\n\n`;
+      }
+      const jobTitle = data.jobTitle || 'the advertised position';
+      const companyName = data.companyName || 'your esteemed organization';
+      
+      coverLetter += `Dear Hiring Manager,\n\n`;
+
+      if (data.jobDescription && data.jobDescription.length > 50) {
+        coverLetter += `I am excited to submit my application for the ${jobTitle} position at ${companyName}. After reviewing your job posting, I am confident that my background aligns perfectly with your requirements. `;
+      } else {
+        coverLetter += `I am writing to express my strong interest in the ${jobTitle} position at ${companyName}. `;
+      }
+      
+      if (data.summary) {
+        const summaryKeywords = data.summary.toLowerCase();
+        if (summaryKeywords.includes('year') || summaryKeywords.includes('experience')) {
+          coverLetter += `With my proven track record in ${data.summary.toLowerCase()}, I am excited about the opportunity to contribute to your team's success.\n\n`;
+        } else {
+          coverLetter += `My background in ${data.summary.toLowerCase()} makes me an ideal candidate for this role.\n\n`;
+        }
+      }
+      if (experiences.length > 0) {
+        const latestExp = experiences[0];
+        coverLetter += `In my most recent role as ${latestExp.title} at ${latestExp.company}, `;
+        if (latestExp.description) {
+          const firstAchievement = latestExp.description.split('.')[0];
+          coverLetter += `${firstAchievement.toLowerCase()}. `;
+        }
+        coverLetter += `This experience has strengthened my expertise in `;
+        
+        if (data.skills) {
+          const relevantSkills = data.skills.split(',').slice(0, 3).map(s => s.trim());
+          coverLetter += `${relevantSkills.join(', ')}, which directly applies to your requirements.\n\n`;
+        } else {
+          coverLetter += `key areas that align with your needs.\n\n`;
+        }
+      }
+      if (data.jobDescription && data.jobDescription.length > 100) {
+        coverLetter += `What particularly excites me about this opportunity is the chance to contribute to ${companyName}'s mission. Based on the job description, I understand you're looking for someone who can make an immediate impact, and I'm confident my skills and enthusiasm make me that person. `;
+      } else {
+        coverLetter += `I am particularly drawn to ${companyName} because of its reputation for excellence and innovation. `;
+      }
+      coverLetter += `I would welcome the opportunity to discuss how my background and passion can contribute to your continued success.\n\n`;
+
+      coverLetter += `Thank you for your time and consideration. I look forward to hearing from you soon.\n\n`;
+      coverLetter += `Sincerely,\n${data.fullName}`;
+      return coverLetter;
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const copyBtn = document.querySelector('.copy-btn');
+        if (copyBtn) {
+          const originalText = copyBtn.textContent;
+          copyBtn.textContent = '✓ Copied!';
+          copyBtn.style.background = '#059669';
+          setTimeout(() => {
+            copyBtn.textContent = originalText;
+            copyBtn.style.background = '#10b981';
+          }, 2000);
+        }
+      }).catch(err => {
+        alert('Content copied to clipboard!');
+      });
+    }
 
     // Form Submission
-    document.getElementById('mainForm').onsubmit = async function(e) {
+    document.getElementById('mainForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const outputDiv = document.getElementById('output');
       const generateBtn = document.getElementById('generateBtn');
-
-      // Gather all fields
-      const fullName = document.getElementById('fullName').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      const address = document.getElementById('address').value.trim();
-      const linkedin = document.getElementById('linkedin').value.trim();
-      const summary = document.getElementById('summary').value.trim();
-      const skills = document.getElementById('skills').value.trim();
-      const jobTitle = document.getElementById('jobTitle').value.trim();
-      const companyName = 
-document.getElementById('companyName').value.trim();
-      const jobDescription = 
-document.getElementById('jobDescription').value.trim();
-      const type = document.getElementById('type').value;
-
-      // Build prompt
-      let prompt = '';
-      if (fullName) prompt += `Full Name: ${fullName}\n`;
-      if (email) prompt += `Email: ${email}\n`;
-      if (phone) prompt += `Phone: ${phone}\n`;
-      if (address) prompt += `Address: ${address}\n`;
-      if (linkedin) prompt += `LinkedIn: ${linkedin}\n`;
-      if (summary) prompt += `Professional Summary: ${summary}\n`;
-      if (skills) prompt += `Skills: ${skills}\n`;
-      if (experiences.length) prompt += `Work 
-Experience:\n${experiences.map((e,i)=>`${i+1}. ${e}`).join('\n')}\n`;
-      if (educations.length) prompt += 
-`Education:\n${educations.map((e,i)=>`${i+1}. ${e}`).join('\n')}\n`;
-      if (jobTitle) prompt += `Target Job Title: ${jobTitle}\n`;
-      if (companyName) prompt += `Target Company: ${companyName}\n`;
-      if (jobDescription) prompt += `Job Description/Requirements: 
-${jobDescription}\n`;
-
-      if (!fullName || !email || !summary) {
-        outputDiv.textContent = "Please fill in at least your name, email, 
-and professional summary.";
+      const data = {
+        fullName: document.getElementById('fullName').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        address: document.getElementById('address').value.trim(),
+        linkedin: document.getElementById('linkedin').value.trim(),
+        summary: document.getElementById('summary').value.trim(),
+        skills: document.getElementById('skills').value.trim(),
+        jobTitle: document.getElementById('jobTitle').value.trim(),
+        companyName: document.getElementById('companyName').value.trim(),
+        jobDescription: document.getElementById('jobDescription').value.trim(),
+        type: document.getElementById('type').value
+      };
+      if (!data.fullName || !data.email) {
+        outputDiv.style.display = 'block';
+        outputDiv.innerHTML = `<div style="color: #dc2626; font-weight: 600;">⚠️ Please fill in at least your name and email address.</div>`;
+        outputDiv.scrollIntoView({ behavior: 'smooth' });
         return;
       }
-
       generateBtn.disabled = true;
-      outputDiv.textContent = 'Generating...';
-
-      try {
-        const response = await fetch('/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt, type })
-        });
-
-        if (!response.ok) throw new Error('Server error');
-
-        const data = await response.json();
-        outputDiv.textContent = data.result || 'No result returned.';
-      } catch (error) {
-        outputDiv.textContent = 'Error: ' + error.message;
-      } finally {
+      generateBtn.classList.add('loading');
+      generateBtn.textContent = 'Generating...';
+      outputDiv.style.display = 'block';
+      outputDiv.innerHTML = '<div style="text-align: center; color: #6366f1; font-weight: 600;">🤖 AI is crafting your professional documents...</div>';
+      outputDiv.scrollIntoView({ behavior: 'smooth' });
+      setTimeout(() => {
+        let result = '';
+        try {
+          if (data.type === 'resume') {
+            result = generateResume(data);
+          } else if (data.type === 'cover-letter') {
+            result = generateCoverLetter(data);
+          } else if (data.type === 'both') {
+            result = generateResume(data);
+            result += '\n\n' + '═'.repeat(60) + '\n';
+            result += '                         COVER LETTER\n';
+            result += '═'.repeat(60) + '\n\n';
+            result += generateCoverLetter(data);
+          }
+          outputDiv.innerHTML = `
+            <div style="margin-bottom: 15px; padding: 10px; background: #ecfdf5; border-radius: 8px; color: #065f46; font-weight: 600;">
+              ✨ Your professional document has been generated successfully!
+            </div>
+            <div style="font-family: 'Courier New', monospace; white-space: pre-wrap; line-height: 1.5;">${result.replace(/</g, "&lt;")}</div>
+            <button class="copy-btn" onclick="copyToClipboard(\`${result.replace(/`/g, '\\`').replace(/\$/g, '\\$').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"')}\`)">
+              📋 Copy to Clipboard
+            </button>
+          `;
+        } catch (error) {
+          outputDiv.innerHTML = `<div style="color: #dc2626; font-weight: 600;">❌ An error occurred while generating your document. Please try again.</div>`;
+        }
         generateBtn.disabled = false;
-      }
-    };
+        generateBtn.classList.remove('loading');
+        generateBtn.textContent = 'Generate Document';
+        setTimeout(() => {
+          outputDiv.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }, Math.random() * 2000 + 2000);
+    });
   </script>
 </body>
 </html>
